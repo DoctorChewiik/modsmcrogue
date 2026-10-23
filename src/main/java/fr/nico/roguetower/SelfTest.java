@@ -45,6 +45,11 @@ public final class SelfTest {
 			check(mobs1 > 0 && mobs5 > 0, "no mobs spawned");
 
 			int x0 = TowerLayout.centerX(2);
+			for (int x = x0 - 32; x <= x0 + 32; x += 16) {
+				for (int z = -32; z <= 32; z += 16) {
+					tower.setChunkForced(x >> 4, z >> 4, true);
+				}
+			}
 			int n = 0;
 			for (net.minecraft.entity.EntityType<?> type : fr.nico.roguetower.entity.ModEntities.all()) {
 				BlockPos pos = new BlockPos(x0 - 10 + (n % 5) * 4, TowerLayout.FLOOR_Y + 1, -10 + (n++ / 5) * 6);
@@ -53,7 +58,13 @@ public final class SelfTest {
 			for (int t = 0; t < 40; t++) {
 				tower.tick(() -> true);
 			}
-			RogueTower.LOGGER.info("[selftest] custom mobs alive after 40 ticks: {}", TowerManager.countMobs(tower, 2));
+			int alive = TowerManager.countMobs(tower, 2);
+			RogueTower.LOGGER.info("[selftest] custom mobs alive after 40 ticks: {} / {}", alive, n);
+			for (net.minecraft.entity.mob.MobEntity mob : tower.getEntitiesByClass(net.minecraft.entity.mob.MobEntity.class,
+				new net.minecraft.util.math.Box(x0 - 60, 0, -60, x0 + 60, 256, 60), e -> true)) {
+				RogueTower.LOGGER.info("[selftest]   {} hp={} y={}", mob.getType(), mob.getHealth(), (int) mob.getY());
+			}
+			check(alive >= n - 2, "custom mobs died right after spawning");
 
 			TowerManager.forceClear(tower, 3);
 			check(tower.getBlockEntity(TowerLayout.rewardChest(3)) instanceof ChestBlockEntity chest && !chest.isEmpty(),
