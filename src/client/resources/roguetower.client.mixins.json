@@ -5,7 +5,9 @@
 	"client": [
 		"CameraMixin",
 		"EntityLookMixin",
-		"KeyboardInputMixin"
+		"KeyboardInputMixin",
+		"BipedModelMixin",
+		"LivingRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -18,6 +18,13 @@ Le .jar se télécharge dans l'onglet **Releases** du dépôt (compilé automati
 - **Classe** : à l'entrée de la tour (ou touche **J**), choisir Guerrier, Archer, Mage, Assassin ou Nécromancien.
 - **R** : compétence de classe. **F** : sort (remplaçable). **H** : vue du dessus auto / toujours / désactivée.
   Si « Échanger les mains » était sur F, il est déplacé sur G.
+- **Combat** : **V** roulade d'esquive (invincible pendant la roulade), **C** parade (au bon moment, annule le coup,
+  étourdit l'ennemi et rend ton prochain coup deux fois plus fort). Les coups au corps à corps s'enchaînent en combo :
+  le 3e coup est un coup final qui frappe autour. Frapper un ennemi dans le dos fait +50 %. L'esquive et la parade
+  consomment de l'endurance (barre verte). En vue du dessus, la visée s'accroche aux monstres proches du curseur.
+- **Monstres** : la tour n'a que des monstres inédits : Araignée de Cristal, Champibombe, Loup Spectral,
+  Sanglier Cornu, Squelette Ardent, Brute des Profondeurs, Œil du Néant, et les boss Liche et Sentinelle de Pierre.
+  Leurs attaques spéciales ont une préparation visible : esquive au bon moment !
 - **Étages** : tuer tous les ennemis, ouvrir le coffre de récompense, puis marcher sur la plateforme d'obsidienne
   pleureuse pour monter. S'accroupir sur la plateforme pour quitter la tour. Un gardien (boss) tous les 5 étages.
 - **Butin** : Commun, Peu commun, Rare, Épique (armes magiques), Légendaire (armes uniques). Les chances augmentent

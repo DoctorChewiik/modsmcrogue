@@ -35,6 +35,7 @@ public final class ClassManager {
 	private static final Identifier ARMOR_ID = RogueTower.id("class_armor");
 	private static final Identifier SPEED_ID = RogueTower.id("class_speed");
 	private static final Identifier DAMAGE_ID = RogueTower.id("class_damage");
+	private static final Identifier REACH_ID = RogueTower.id("combat_reach");
 
 	/** Tick serveur auquel la compétence (0) et le sort (1) seront prêts. */
 	private static final Map<UUID, int[]> READY_AT = new HashMap<>();
@@ -117,6 +118,7 @@ public final class ClassManager {
 			return;
 		}
 		if (Spells.cast(p, spell)) {
+			fr.nico.roguetower.combat.CombatManager.playAnim(p, fr.nico.roguetower.net.CombatAnimPayload.CAST, 0, 0);
 			int cooldown = spell.cooldown;
 			if (data.rogueClass == RogueClass.MAGE) {
 				cooldown = cooldown * 7 / 10;
@@ -150,6 +152,8 @@ public final class ClassManager {
 		}, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE);
 		setModifier(p, EntityAttributes.GENERIC_ATTACK_DAMAGE, DAMAGE_ID, cls == RogueClass.ASSASSIN ? 2 : 0,
 			EntityAttributeModifier.Operation.ADD_VALUE);
+		// Allonge un peu la portée au corps à corps, plus confortable en vue du dessus
+		setModifier(p, EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE, REACH_ID, 1.0, EntityAttributeModifier.Operation.ADD_VALUE);
 		if (p.getHealth() > p.getMaxHealth()) {
 			p.setHealth(p.getMaxHealth());
 		}

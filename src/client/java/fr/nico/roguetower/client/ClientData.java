@@ -11,6 +11,10 @@ public final class ClientData {
 	public static long abilityReady;
 	public static long spellReady;
 	public static long clientTicks;
+	public static int stamina = 100;
+	public static int combo;
+	public static int lastEvent;
+	public static long lastEventTick = -100;
 
 	private ClientData() {
 	}

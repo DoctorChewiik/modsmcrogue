@@ -13,7 +13,12 @@ import fr.nico.roguetower.loot.Loot;
 import fr.nico.roguetower.loot.Rarity;
 import fr.nico.roguetower.loot.WeaponEffects;
 import fr.nico.roguetower.mob.MobSetup;
+import fr.nico.roguetower.combat.CombatManager;
+import fr.nico.roguetower.entity.ModEntities;
 import fr.nico.roguetower.net.AbilityPayload;
+import fr.nico.roguetower.net.CombatAnimPayload;
+import fr.nico.roguetower.net.CombatPayload;
+import fr.nico.roguetower.net.CombatSyncPayload;
 import fr.nico.roguetower.net.ClassSyncPayload;
 import fr.nico.roguetower.net.SelectClassPayload;
 import fr.nico.roguetower.world.TowerChunkGenerator;
@@ -26,6 +31,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -91,6 +97,13 @@ public class RogueTower implements ModInitializer {
 		PayloadTypeRegistry.playC2S().register(AbilityPayload.ID, AbilityPayload.CODEC);
 		PayloadTypeRegistry.playC2S().register(SelectClassPayload.ID, SelectClassPayload.CODEC);
 		PayloadTypeRegistry.playS2C().register(ClassSyncPayload.ID, ClassSyncPayload.CODEC);
+		PayloadTypeRegistry.playC2S().register(CombatPayload.ID, CombatPayload.CODEC);
+		PayloadTypeRegistry.playS2C().register(CombatSyncPayload.ID, CombatSyncPayload.CODEC);
+		PayloadTypeRegistry.playS2C().register(CombatAnimPayload.ID, CombatAnimPayload.CODEC);
+		ServerPlayNetworking.registerGlobalReceiver(CombatPayload.ID,
+			(payload, context) -> CombatManager.handle(context.player(), payload));
+		ServerLivingEntityEvents.ALLOW_DAMAGE.register(CombatManager::allowDamage);
+		ModEntities.init();
 
 		ServerPlayNetworking.registerGlobalReceiver(AbilityPayload.ID,
 			(payload, context) -> ClassManager.useSlot(context.player(), payload.slot()));
@@ -120,6 +133,7 @@ public class RogueTower implements ModInitializer {
 		// Effets des armes magiques / légendaires
 		AttackEntityCallback.EVENT.register((player, world, hand, entity, hit) -> {
 			if (!world.isClient && player instanceof ServerPlayerEntity sp && entity instanceof LivingEntity target) {
+				CombatManager.onMeleeHit(sp, target);
 				WeaponEffects.onHit(sp, target);
 			}
 			return ActionResult.PASS;
@@ -142,6 +156,7 @@ public class RogueTower implements ModInitializer {
 		ServerTickEvents.END_SERVER_TICK.register(server -> {
 			TowerManager.tick(server);
 			ClassManager.tick(server);
+			CombatManager.tick(server);
 		});
 
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {

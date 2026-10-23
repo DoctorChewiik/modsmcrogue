@@ -2,6 +2,7 @@ package fr.nico.roguetower.mob;
 
 import fr.nico.roguetower.RogueTower;
 import fr.nico.roguetower.classes.Spells;
+import fr.nico.roguetower.entity.ModEntities;
 import fr.nico.roguetower.mixin.MobEntityAccessor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -38,42 +39,19 @@ public final class MobSetup {
 	private record Entry(EntityType<?> type, int minFloor, int weight) {
 	}
 
-	private static final List<Entry> HOSTILES = List.of(
-		new Entry(EntityType.ZOMBIE, 1, 10),
-		new Entry(EntityType.SKELETON, 1, 8),
-		new Entry(EntityType.SPIDER, 1, 7),
-		new Entry(EntityType.CREEPER, 2, 4),
-		new Entry(EntityType.HUSK, 3, 5),
-		new Entry(EntityType.STRAY, 4, 5),
-		new Entry(EntityType.CAVE_SPIDER, 4, 4),
-		new Entry(EntityType.SLIME, 3, 3),
-		new Entry(EntityType.WITCH, 5, 3),
-		new Entry(EntityType.PILLAGER, 5, 4),
-		new Entry(EntityType.VINDICATOR, 7, 3),
-		new Entry(EntityType.BLAZE, 9, 3),
-		new Entry(EntityType.WITHER_SKELETON, 11, 3),
-		new Entry(EntityType.BOGGED, 6, 3),
-		new Entry(EntityType.BREEZE, 12, 2)
-	);
-
-	private static final List<Entry> ANIMALS = List.of(
-		new Entry(EntityType.PIG, 1, 8),
-		new Entry(EntityType.COW, 1, 8),
-		new Entry(EntityType.SHEEP, 1, 8),
-		new Entry(EntityType.CHICKEN, 1, 8),
-		new Entry(EntityType.RABBIT, 1, 5),
-		new Entry(EntityType.WOLF, 2, 5),
-		new Entry(EntityType.FOX, 2, 4),
-		new Entry(EntityType.GOAT, 3, 4),
-		new Entry(EntityType.LLAMA, 4, 3),
-		new Entry(EntityType.MOOSHROOM, 4, 3),
-		new Entry(EntityType.PANDA, 5, 3),
-		new Entry(EntityType.POLAR_BEAR, 6, 3),
-		new Entry(EntityType.HORSE, 6, 2)
+	/** Uniquement des monstres inédits (plus aucun monstre ni animal vanilla dans la tour). */
+	private static final List<Entry> MONSTERS = List.of(
+		new Entry(ModEntities.CRYSTAL_SPIDER, 1, 10),
+		new Entry(ModEntities.MYCOBOMB, 1, 8),
+		new Entry(ModEntities.SPECTRAL_WOLF, 1, 8),
+		new Entry(ModEntities.BOAR, 2, 7),
+		new Entry(ModEntities.EMBER_SKELETON, 2, 8),
+		new Entry(ModEntities.BRUTE, 4, 4),
+		new Entry(ModEntities.VOID_EYE, 5, 5)
 	);
 
 	private static final List<EntityType<?>> BOSSES = List.of(
-		EntityType.RAVAGER, EntityType.EVOKER, EntityType.IRON_GOLEM, EntityType.POLAR_BEAR, EntityType.VINDICATOR
+		ModEntities.LICH, ModEntities.STONE_SENTINEL, ModEntities.BRUTE
 	);
 
 	private static EntityType<?> pick(List<Entry> list, int floor, Random random) {
@@ -96,8 +74,7 @@ public final class MobSetup {
 	}
 
 	public static EntityType<?> randomMob(int floor, Random random) {
-		// environ 40 % d'animaux enragés, 60 % de monstres
-		return random.nextFloat() < 0.4f ? pick(ANIMALS, floor, random) : pick(HOSTILES, floor, random);
+		return pick(MONSTERS, floor, random);
 	}
 
 	public static EntityType<?> randomBoss(Random random) {
@@ -119,12 +96,12 @@ public final class MobSetup {
 		mob.addCommandTag(AGGRO_TAG);
 		mob.setPersistent();
 
-		double healthBonus = 0.15 * (floor - 1) + (boss ? 4.0 : 0.0);
+		double healthBonus = 0.15 * (floor - 1) + (boss ? 1.0 : 0.0);
 		if (mob instanceof AnimalEntity) {
 			healthBonus += 0.5;
 		}
 		modify(mob, EntityAttributes.GENERIC_MAX_HEALTH, HEALTH_ID, healthBonus, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE);
-		modify(mob, EntityAttributes.GENERIC_ATTACK_DAMAGE, DAMAGE_ID, 0.5 * (floor - 1) + (boss ? 4 : 0), EntityAttributeModifier.Operation.ADD_VALUE);
+		modify(mob, EntityAttributes.GENERIC_ATTACK_DAMAGE, DAMAGE_ID, 0.5 * (floor - 1) + (boss ? 2 : 0), EntityAttributeModifier.Operation.ADD_VALUE);
 		mob.setHealth(mob.getMaxHealth());
 
 		if (boss) {

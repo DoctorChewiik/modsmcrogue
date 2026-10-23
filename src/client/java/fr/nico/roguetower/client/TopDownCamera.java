@@ -5,6 +5,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.Perspective;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.Box;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.MathHelper;
@@ -112,6 +115,22 @@ public final class TopDownCamera {
 		}
 		double t = (planeY - camPos.y) / dir.y;
 		Vec3d target = camPos.add(dir.multiply(t));
+		// Visée assistée : si un monstre est sous le curseur, on vise son centre
+		LivingEntity best = null;
+		double bestDist = 1.6 * 1.6;
+		for (Entity e : client.world.getOtherEntities(player, new Box(target, target).expand(2.0, 3.0, 2.0))) {
+			if (e instanceof LivingEntity living && living.isAlive() && !(e instanceof PlayerEntity)) {
+				double d = new Vec3d(living.getX() - target.x, 0, living.getZ() - target.z).lengthSquared();
+				if (d < bestDist && living.squaredDistanceTo(player) < 12 * 12) {
+					bestDist = d;
+					best = living;
+				}
+			}
+		}
+		if (best != null) {
+			target = new Vec3d(best.getX(), best.getBodyY(0.5), best.getZ());
+			planeY = target.y;
+		}
 		double dx = target.x - player.getX();
 		double dz = target.z - player.getZ();
 		double horiz = Math.sqrt(dx * dx + dz * dz);
