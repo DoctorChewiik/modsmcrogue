@@ -1,0 +1,13 @@
+{
+	"required": true,
+	"package": "fr.nico.roguetower.client.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+		"CameraMixin",
+		"EntityLookMixin",
+		"KeyboardInputMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

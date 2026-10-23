@@ -1,0 +1,80 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Build
+        id: build
+        run: |
+          YARN=$(curl -fsS https://meta.fabricmc.net/v2/versions/yarn/1.21.1 | jq -r '.[0].version')
+          LOADER=$(curl -fsS https://meta.fabricmc.net/v2/versions/loader | jq -r '[.[]|select(.stable)][0].version')
+          FAPI=$(curl -fsS https://maven.fabricmc.net/net/fabricmc/fabric-api/fabric-api/maven-metadata.xml | grep -oP '(?<=<version>)[^<]*\+1\.21\.1(?=</version>)' | tail -1)
+          sed -i "s/^yarn_mappings=.*/yarn_mappings=$YARN/; s/^loader_version=.*/loader_version=$LOADER/; s/^fabric_version=.*/fabric_version=$FAPI/" gradle.properties
+          cat gradle.properties > build.log
+          chmod +x ./gradlew
+          set -o pipefail
+          ./gradlew build --stacktrace --no-daemon 2>&1 | tee -a build.log
+
+      - name: Server self-test
+        id: server
+        continue-on-error: true
+        run: |
+          mkdir -p run-server
+          echo "eula=true" > run-server/eula.txt
+          set -o pipefail
+          timeout 900 ./gradlew runSelftestServer --no-daemon 2>&1 | tee server.log || true
+          grep -q "ROGUETOWER SELFTEST OK" server.log
+
+      - name: Client self-test
+        id: client
+        continue-on-error: true
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq xvfb mesa-utils libgl1-mesa-dri > /dev/null
+          set -o pipefail
+          timeout 900 xvfb-run -a -s "-screen 0 1280x720x24" ./gradlew runSelftestClient --no-daemon 2>&1 | tee client.log || true
+          grep -q "ROGUETOWER CLIENT SELFTEST OK" client.log
+
+      - name: Upload jar
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: roguetower
+          path: |
+            build/libs/*.jar
+            *.log
+            !build/libs/*-sources.jar
+
+      - name: Publish release
+        if: always() && github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="build-${{ github.run_number }}"
+          FILES=$(ls build/libs/*.jar 2>/dev/null | grep -v sources || true)
+          for f in build.log server.log client.log; do
+            if [ -f "$f" ]; then tail -c 3000000 "$f" > "$f.txt"; FILES="$FILES $f.txt"; fi
+          done
+          gh release create "$TAG" $FILES --target "${{ github.sha }}" \
+            --title "Rogue Tower $TAG (${GITHUB_REF_NAME})" \
+            --notes "Build: ${{ steps.build.outcome }} / test serveur: ${{ steps.server.outcome }} / test client: ${{ steps.client.outcome }}. Glisser le .jar dans le dossier mods (Fabric Loader + Fabric API, Minecraft 1.21.1)." \
+            --prerelease
+
+      - name: Fail if a self-test failed
+        if: steps.server.outcome == 'failure' || steps.client.outcome == 'failure'
+        run: exit 1
