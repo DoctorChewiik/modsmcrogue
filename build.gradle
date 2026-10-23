@@ -13,6 +13,21 @@ base {
 loom {
 	splitEnvironmentSourceSets()
 
+	runs {
+		selftestServer {
+			server()
+			name "Selftest Server"
+			vmArg "-Droguetower.selftest=true"
+			runDir "run-server"
+		}
+		selftestClient {
+			client()
+			name "Selftest Client"
+			vmArg "-Droguetower.selftest=true"
+			runDir "run-client"
+		}
+	}
+
 	mods {
 		"roguetower" {
 			sourceSet sourceSets.main

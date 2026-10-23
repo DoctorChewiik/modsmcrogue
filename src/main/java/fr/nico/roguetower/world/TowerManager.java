@@ -249,7 +249,7 @@ public final class TowerManager {
 			e -> e.isAlive() && e.getCommandTags().contains(MobSetup.MOB_TAG)).size();
 	}
 
-	private static void spawnWave(ServerWorld world, int floor) {
+	public static void spawnWave(ServerWorld world, int floor) {
 		Random random = world.getRandom();
 		int count = Math.min(40, 6 + floor * 2);
 		ServerPlayerEntity target = world.getPlayers().stream()
@@ -286,6 +286,10 @@ public final class TowerManager {
 			return null;
 		}
 		return pos;
+	}
+
+	public static void forceClear(ServerWorld world, int floor) {
+		clearFloor(world, floor, FLOORS.computeIfAbsent(floor, f -> new FloorState()));
 	}
 
 	private static void clearFloor(ServerWorld world, int floor, FloorState state) {

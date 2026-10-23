@@ -1,6 +1,7 @@
 package fr.nico.roguetower.client;
 
 import fr.nico.roguetower.RogueTower;
+import fr.nico.roguetower.SelfTest;
 import fr.nico.roguetower.classes.RogueClass;
 import fr.nico.roguetower.classes.Spell;
 import fr.nico.roguetower.net.AbilityPayload;
@@ -14,6 +15,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.InputUtil;
@@ -28,6 +30,7 @@ public class RogueTowerClient implements ClientModInitializer {
 	private static KeyBinding classKey;
 	private static KeyBinding cameraKey;
 	private static boolean checkedConflicts;
+	private static int selfTestTicks;
 
 	@Override
 	public void onInitializeClient() {
@@ -51,6 +54,10 @@ public class RogueTowerClient implements ClientModInitializer {
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			ClientData.clientTicks++;
+			if (SelfTest.enabled() && client.currentScreen instanceof TitleScreen && ++selfTestTicks == 100) {
+				RogueTower.LOGGER.info("ROGUETOWER CLIENT SELFTEST OK");
+				client.scheduleStop();
+			}
 			if (client.player == null) {
 				return;
 			}
