@@ -39,7 +39,7 @@ public class VoidEyeEntity extends FlyingRogueMob {
 		if (canSee(target)) {
 			specialCooldown = 55;
 			startAction(ACTION_WINDUP, 16);
-			playSound(SoundEvents.BLOCK_BEACON_AMBIENT, 1.2f, 1.8f);
+			sfx(SoundEvents.BLOCK_BEACON_AMBIENT, 1.2f, 1.8f);
 		}
 	}
 
@@ -51,7 +51,7 @@ public class VoidEyeEntity extends FlyingRogueMob {
 		}
 		shootBolt(world, target, MagicBoltEntity.VOID, 5f, 0.6, -6f);
 		shootBolt(world, target, MagicBoltEntity.VOID, 5f, 0.6, 6f);
-		playSound(SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, 1f, 1.5f);
+		sfx(SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, 1f, 1.5f);
 		if (random.nextInt(3) == 0) {
 			double a = random.nextDouble() * Math.PI * 2;
 			world.spawnParticles(ParticleTypes.REVERSE_PORTAL, getX(), getBodyY(0.5), getZ(), 30, 0.4, 0.4, 0.4, 0.05);

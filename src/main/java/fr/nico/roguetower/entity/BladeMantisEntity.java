@@ -40,14 +40,14 @@ public class BladeMantisEntity extends RogueMob {
 		if (squaredDistanceTo(target) < 9) {
 			specialCooldown = 70;
 			startAction(ACTION_WINDUP, 11);
-			playSound(SoundEvents.ENTITY_SPIDER_AMBIENT, 1f, 1.8f);
+			sfx(SoundEvents.ENTITY_SPIDER_AMBIENT, 1f, 1.8f);
 		}
 	}
 
 	@Override
 	protected void onWindupDone(ServerWorld world) {
 		startAction(ACTION_STRIKE, 6);
-		playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1.2f, 1.3f);
+		sfx(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1.2f, 1.3f);
 		Vec3d look = getRotationVector().multiply(1, 0, 1).normalize();
 		Vec3d center = getPos().add(look.multiply(1.5));
 		world.spawnParticles(ParticleTypes.SWEEP_ATTACK, center.x, getBodyY(0.6), center.z, 2, 0.5, 0.1, 0.5, 0);

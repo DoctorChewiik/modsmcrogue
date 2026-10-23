@@ -49,7 +49,7 @@ public class HowlingTotemEntity extends RogueMob {
 		if (squaredDistanceTo(target) < 22 * 22 && canSee(target)) {
 			specialCooldown = 50;
 			startAction(ACTION_WINDUP, 20);
-			playSound(SoundEvents.ENTITY_WOLF_HOWL, 0.9f, 0.6f);
+			sfx(SoundEvents.ENTITY_WOLF_HOWL, 0.9f, 0.6f);
 		}
 	}
 
@@ -62,7 +62,7 @@ public class HowlingTotemEntity extends RogueMob {
 		for (int i = -1; i <= 1; i++) {
 			shootBolt(world, target, MagicBoltEntity.SPIRIT, 4f, 0.55, i * 12f);
 		}
-		playSound(SoundEvents.ENTITY_EVOKER_CAST_SPELL, 1f, 1.4f);
+		sfx(SoundEvents.ENTITY_EVOKER_CAST_SPELL, 1f, 1.4f);
 	}
 
 	@Override

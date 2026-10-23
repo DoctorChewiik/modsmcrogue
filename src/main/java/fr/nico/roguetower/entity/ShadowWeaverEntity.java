@@ -46,7 +46,7 @@ public class ShadowWeaverEntity extends FlyingRogueMob {
 		pattern = (pattern + 1) % 3;
 		specialCooldown = 50;
 		startAction(ACTION_WINDUP, pattern == 1 ? 26 : 20);
-		playSound(pattern == 1 ? SoundEvents.ENTITY_EVOKER_PREPARE_SUMMON : SoundEvents.ENTITY_EVOKER_PREPARE_ATTACK, 1.2f, 0.6f);
+		sfx(pattern == 1 ? SoundEvents.ENTITY_EVOKER_PREPARE_SUMMON : SoundEvents.ENTITY_EVOKER_PREPARE_ATTACK, 1.2f, 0.6f);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class ShadowWeaverEntity extends FlyingRogueMob {
 						minion.addCommandTag(SUMMON_TAG);
 					}
 				}
-				playSound(SoundEvents.ENTITY_EVOKER_CAST_SPELL, 1.2f, 0.5f);
+				sfx(SoundEvents.ENTITY_EVOKER_CAST_SPELL, 1.2f, 0.5f);
 			}
 			case 2 -> {
 				world.spawnParticles(ParticleTypes.SQUID_INK, getX(), getBodyY(0.5), getZ(), 30, 0.5, 0.8, 0.5, 0.05);
@@ -82,7 +82,7 @@ public class ShadowWeaverEntity extends FlyingRogueMob {
 				for (int i = -2; i <= 2; i++) {
 					shootBolt(world, target, MagicBoltEntity.SHADOW, 5f, 0.55, i * 10f);
 				}
-				playSound(SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, 1.2f, 0.6f);
+				sfx(SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, 1.2f, 0.6f);
 			}
 		}
 	}

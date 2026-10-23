@@ -41,7 +41,7 @@ public class SporelingEntity extends RogueMob {
 		if (squaredDistanceTo(target) < 6.25) {
 			specialCooldown = 1000;
 			startAction(ACTION_WINDUP, 24);
-			playSound(SoundEvents.ENTITY_PUFFER_FISH_BLOW_UP, 1f, 0.7f);
+			sfx(SoundEvents.ENTITY_PUFFER_FISH_BLOW_UP, 1f, 0.7f);
 		}
 	}
 
@@ -49,7 +49,7 @@ public class SporelingEntity extends RogueMob {
 	protected void onWindupDone(ServerWorld world) {
 		world.spawnParticles(ParticleTypes.SPORE_BLOSSOM_AIR, getX(), getBodyY(0.5), getZ(), 60, 1.5, 0.8, 1.5, 0.05);
 		world.spawnParticles(ParticleTypes.EXPLOSION, getX(), getBodyY(0.5), getZ(), 2, 0.3, 0.3, 0.3, 0);
-		playSound(SoundEvents.ENTITY_PUFFER_FISH_BLOW_OUT, 1.5f, 0.5f);
+		sfx(SoundEvents.ENTITY_PUFFER_FISH_BLOW_OUT, 1.5f, 0.5f);
 		for (PlayerEntity p : world.getEntitiesByClass(PlayerEntity.class, getBoundingBox().expand(3), this::canHurt)) {
 			p.damage(getDamageSources().mobAttack(this), 4f);
 		}

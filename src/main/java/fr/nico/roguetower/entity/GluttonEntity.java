@@ -49,7 +49,7 @@ public class GluttonEntity extends RogueMob {
 		if (d > 6 && d < 49 && canSee(target)) {
 			specialCooldown = 90;
 			startAction(ACTION_WINDUP, 14);
-			playSound(SoundEvents.ENTITY_RAVAGER_ROAR, 0.7f, 1.8f);
+			sfx(SoundEvents.ENTITY_RAVAGER_ROAR, 0.7f, 1.8f);
 		}
 	}
 
@@ -62,7 +62,7 @@ public class GluttonEntity extends RogueMob {
 			velocityModified = true;
 		}
 		startAction(ACTION_STRIKE, 10);
-		playSound(SoundEvents.ENTITY_GENERIC_EAT, 1.2f, 0.6f);
+		sfx(SoundEvents.ENTITY_GENERIC_EAT, 1.2f, 0.6f);
 	}
 
 	@Override

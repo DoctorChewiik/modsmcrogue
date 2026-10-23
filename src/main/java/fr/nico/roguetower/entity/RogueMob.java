@@ -144,7 +144,7 @@ public abstract class RogueMob extends HostileEntity {
 
 	// ---------- outils ----------
 
-	protected void playSound(SoundEvent sound, float volume, float pitch) {
+	protected void sfx(SoundEvent sound, float volume, float pitch) {
 		getWorld().playSound(null, getX(), getY(), getZ(), sound, SoundCategory.HOSTILE, volume, pitch);
 	}
 

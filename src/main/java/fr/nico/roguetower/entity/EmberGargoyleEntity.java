@@ -39,7 +39,7 @@ public class EmberGargoyleEntity extends FlyingRogueMob {
 		if (squaredDistanceTo(target) < 12 * 12 && canSee(target)) {
 			specialCooldown = 80;
 			startAction(ACTION_WINDUP, 16);
-			playSound(SoundEvents.ENTITY_PHANTOM_SWOOP, 1f, 0.7f);
+			sfx(SoundEvents.ENTITY_PHANTOM_SWOOP, 1f, 0.7f);
 		}
 	}
 

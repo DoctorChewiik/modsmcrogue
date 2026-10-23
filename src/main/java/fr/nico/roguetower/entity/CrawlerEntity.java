@@ -41,7 +41,7 @@ public class CrawlerEntity extends RogueMob {
 		if (d > 6 && d < 64 && isOnGround()) {
 			specialCooldown = 80;
 			startAction(ACTION_WINDUP, 9);
-			playSound(SoundEvents.ENTITY_SILVERFISH_AMBIENT, 1f, 0.6f);
+			sfx(SoundEvents.ENTITY_SILVERFISH_AMBIENT, 1f, 0.6f);
 		}
 	}
 

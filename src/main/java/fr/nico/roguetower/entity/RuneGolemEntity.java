@@ -45,12 +45,12 @@ public class RuneGolemEntity extends RogueMob {
 			slamming = true;
 			specialCooldown = 70;
 			startAction(ACTION_WINDUP, 20);
-			playSound(SoundEvents.ENTITY_WARDEN_ROAR, 0.8f, 1.5f);
+			sfx(SoundEvents.ENTITY_WARDEN_ROAR, 0.8f, 1.5f);
 		} else if (d < 22 * 22 && canSee(target)) {
 			slamming = false;
 			specialCooldown = 90;
 			startAction(ACTION_WINDUP, 18);
-			playSound(SoundEvents.BLOCK_BEACON_POWER_SELECT, 1.2f, 0.7f);
+			sfx(SoundEvents.BLOCK_BEACON_POWER_SELECT, 1.2f, 0.7f);
 		}
 	}
 
@@ -59,7 +59,7 @@ public class RuneGolemEntity extends RogueMob {
 		LivingEntity target = getTarget();
 		if (slamming) {
 			startAction(ACTION_STRIKE, 8);
-			playSound(SoundEvents.ENTITY_GENERIC_EXPLODE.value(), 1.2f, 0.5f);
+			sfx(SoundEvents.ENTITY_GENERIC_EXPLODE.value(), 1.2f, 0.5f);
 			for (int ring = 1; ring <= 6; ring++) {
 				for (int i = 0; i < ring * 6; i++) {
 					double a = i * Math.PI * 2 / (ring * 6);
@@ -76,7 +76,7 @@ public class RuneGolemEntity extends RogueMob {
 			for (int i = -2; i <= 2; i++) {
 				shootBolt(world, target, MagicBoltEntity.RUNE, 6f, 0.5, i * 14f);
 			}
-			playSound(SoundEvents.ENTITY_EVOKER_CAST_SPELL, 1.2f, 0.6f);
+			sfx(SoundEvents.ENTITY_EVOKER_CAST_SPELL, 1.2f, 0.6f);
 		}
 	}
 
