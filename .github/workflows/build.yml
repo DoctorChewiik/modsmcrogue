@@ -67,6 +67,11 @@ jobs:
         run: |
           TAG="build-${{ github.run_number }}"
           FILES=$(ls build/libs/*.jar 2>/dev/null | grep -v sources || true)
+          if [ -f build/libs/roguetower.jar ]; then
+            cp README.md LISEZMOI.md
+            zip -j roguetower.zip build/libs/roguetower.jar LISEZMOI.md
+            FILES="roguetower.zip $FILES"
+          fi
           for f in build.log server.log client.log; do
             if [ -f "$f" ]; then tail -c 3000000 "$f" > "$f.txt"; FILES="$FILES $f.txt"; fi
           done
