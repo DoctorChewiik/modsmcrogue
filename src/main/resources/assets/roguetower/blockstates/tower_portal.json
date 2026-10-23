@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"axis=x": { "model": "roguetower:block/tower_portal_ns" },
+		"axis=z": { "model": "roguetower:block/tower_portal_ew" }
+	}
+}

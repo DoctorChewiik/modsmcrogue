@@ -1,0 +1,28 @@
+{
+	"schemaVersion": 1,
+	"id": "roguetower",
+	"version": "${version}",
+	"name": "Rogue Tower",
+	"description": "Transforme Minecraft en roguelite : vue du dessus, classes avec pouvoirs, et une tour infinie remplie de monstres et d'animaux agressifs. Portail : cadre en cobblestone (ouverture 4x4) allumé au briquet.",
+	"authors": ["Nico"],
+	"license": "MIT",
+	"icon": "assets/roguetower/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["fr.nico.roguetower.RogueTower"],
+		"client": ["fr.nico.roguetower.client.RogueTowerClient"]
+	},
+	"mixins": [
+		"roguetower.mixins.json",
+		{
+			"config": "roguetower.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.0",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

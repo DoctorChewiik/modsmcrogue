@@ -1,0 +1,9 @@
+{
+	"block.roguetower.tower_portal": "Tower Portal",
+	"item.roguetower.spell_book": "Spell Book",
+	"category.roguetower": "Rogue Tower",
+	"key.roguetower.ability": "Class ability",
+	"key.roguetower.spell": "Cast spell",
+	"key.roguetower.class": "Choose class",
+	"key.roguetower.camera": "Top-down view (auto / always / off)"
+}

@@ -1,0 +1,9 @@
+{
+	"block.roguetower.tower_portal": "Portail de la Tour",
+	"item.roguetower.spell_book": "Livre de sort",
+	"category.roguetower": "Rogue Tower",
+	"key.roguetower.ability": "Compétence de classe",
+	"key.roguetower.spell": "Lancer le sort",
+	"key.roguetower.class": "Choisir sa classe",
+	"key.roguetower.camera": "Vue du dessus (auto / toujours / off)"
+}
