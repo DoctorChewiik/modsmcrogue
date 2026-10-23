@@ -22,9 +22,14 @@ jobs:
       - name: Build
         id: build
         run: |
+          YARN=$(curl -fsS https://meta.fabricmc.net/v2/versions/yarn/1.21.1 | jq -r '.[0].version')
+          LOADER=$(curl -fsS https://meta.fabricmc.net/v2/versions/loader | jq -r '[.[]|select(.stable)][0].version')
+          FAPI=$(curl -fsS https://maven.fabricmc.net/net/fabricmc/fabric-api/fabric-api/maven-metadata.xml | grep -oP '(?<=<version>)[^<]*\+1\.21\.1(?=</version>)' | tail -1)
+          sed -i "s/^yarn_mappings=.*/yarn_mappings=$YARN/; s/^loader_version=.*/loader_version=$LOADER/; s/^fabric_version=.*/fabric_version=$FAPI/" gradle.properties
+          cat gradle.properties > build.log
           chmod +x ./gradlew
           set -o pipefail
-          ./gradlew build --stacktrace --no-daemon 2>&1 | tee build.log
+          ./gradlew build --stacktrace --no-daemon 2>&1 | tee -a build.log
 
       - name: Server self-test
         id: server
