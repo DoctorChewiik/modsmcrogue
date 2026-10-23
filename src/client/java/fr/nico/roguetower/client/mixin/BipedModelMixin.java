@@ -1,7 +1,6 @@
 package fr.nico.roguetower.client.mixin;
 
 import fr.nico.roguetower.client.CombatAnimations;
-import fr.nico.roguetower.entity.BruteEntity;
 import fr.nico.roguetower.net.CombatAnimPayload;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
@@ -15,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/** Poses des mouvements de combat (joueurs) et préparation du coup au sol de la Brute. */
+/** Poses des mouvements de combat des joueurs. */
 @Mixin(BipedEntityModel.class)
 public abstract class BipedModelMixin<T extends LivingEntity> {
 	@Shadow @Final public ModelPart body;
@@ -27,13 +26,6 @@ public abstract class BipedModelMixin<T extends LivingEntity> {
 	@Inject(method = "setAngles(Lnet/minecraft/entity/LivingEntity;FFFFF)V", at = @At("TAIL"))
 	private void roguetower$combatPose(T entity, float limbAngle, float limbDistance, float animationProgress,
 									   float headYaw, float headPitch, CallbackInfo ci) {
-		if (entity instanceof BruteEntity brute && brute.getWindup() > 0) {
-			rightArm.pitch = -2.9f;
-			leftArm.pitch = -2.9f;
-			rightArm.roll = 0.25f;
-			leftArm.roll = -0.25f;
-			return;
-		}
 		if (!(entity instanceof PlayerEntity)) {
 			return;
 		}

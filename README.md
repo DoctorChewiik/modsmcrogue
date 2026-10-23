@@ -22,9 +22,11 @@ Le .jar se télécharge dans l'onglet **Releases** du dépôt (compilé automati
   étourdit l'ennemi et rend ton prochain coup deux fois plus fort). Les coups au corps à corps s'enchaînent en combo :
   le 3e coup est un coup final qui frappe autour. Frapper un ennemi dans le dos fait +50 %. L'esquive et la parade
   consomment de l'endurance (barre verte). En vue du dessus, la visée s'accroche aux monstres proches du curseur.
-- **Monstres** : la tour n'a que des monstres inédits : Araignée de Cristal, Champibombe, Loup Spectral,
-  Sanglier Cornu, Squelette Ardent, Brute des Profondeurs, Œil du Néant, et les boss Liche et Sentinelle de Pierre.
-  Leurs attaques spéciales ont une préparation visible : esquive au bon moment !
+- **Monstres** : uniquement des créatures inventées pour le mod, avec leurs propres modèles 3D et textures :
+  Glouton (gueule géante qui bondit), Mantelame (insecte à faux), Totem Hurleur (tourelle qui tire des esprits),
+  Rampecroc (mille-pattes venimeux), Sporelin (champignon qui gonfle puis explose), Gargouille de Braise (pique en
+  flammes), Œil du Néant (tire des orbes et se téléporte), et les boss Golem Runique et Tisseuse d'Ombres.
+  Chaque attaque spéciale a une préparation visible : esquive au bon moment !
 - **Étages** : tuer tous les ennemis, ouvrir le coffre de récompense, puis marcher sur la plateforme d'obsidienne
   pleureuse pour monter. S'accroupir sur la plateforme pour quitter la tour. Un gardien (boss) tous les 5 étages.
 - **Butin** : Commun, Peu commun, Rare, Épique (armes magiques), Légendaire (armes uniques). Les chances augmentent

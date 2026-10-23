@@ -3,77 +3,79 @@ package fr.nico.roguetower.entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.BlazeEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-/** Œil du Néant : globe oculaire volant qui se téléporte et tire des boules de feu. */
-public class VoidEyeEntity extends BlazeEntity {
-	private static final TrackedData<Integer> CHARGE = DataTracker.registerData(VoidEyeEntity.class, TrackedDataHandlerRegistry.INTEGER);
-	private int blinkCooldown = 80;
-
-	public VoidEyeEntity(EntityType<? extends BlazeEntity> type, World world) {
+/** Œil du Néant : flotte à distance, se contracte puis tire des orbes du néant, et se téléporte. */
+public class VoidEyeEntity extends FlyingRogueMob {
+	public VoidEyeEntity(EntityType<? extends HostileEntity> type, World world) {
 		super(type, world);
-		this.experiencePoints = 15;
+		this.experiencePoints = 12;
 	}
 
-	public static DefaultAttributeContainer.Builder createVoidEyeAttributes() {
-		return BlazeEntity.createBlazeAttributes()
-			.add(EntityAttributes.GENERIC_MAX_HEALTH, 30.0)
-			.add(EntityAttributes.GENERIC_FOLLOW_RANGE, 40.0);
-	}
-
-	@Override
-	protected void initDataTracker(DataTracker.Builder builder) {
-		super.initDataTracker(builder);
-		builder.add(CHARGE, 0);
-	}
-
-	/** Ticks restants avant la téléportation (l'œil se contracte). */
-	public int getCharge() {
-		return dataTracker.get(CHARGE);
+	public static DefaultAttributeContainer.Builder createAttributes() {
+		return HostileEntity.createHostileAttributes()
+			.add(EntityAttributes.GENERIC_MAX_HEALTH, 26.0)
+			.add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0);
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
-		if (getWorld() instanceof ServerWorld world && isAlive()) {
-			LivingEntity target = getTarget();
-			if (target != null && --blinkCooldown == 15) {
-				dataTracker.set(CHARGE, 15);
-			}
-			if (getCharge() > 0) {
-				dataTracker.set(CHARGE, getCharge() - 1);
-				world.spawnParticles(ParticleTypes.REVERSE_PORTAL, getX(), getBodyY(0.5), getZ(), 3, 0.5, 0.5, 0.5, 0.02);
-			}
-			if (target != null && blinkCooldown <= 0) {
-				blinkCooldown = 100 + random.nextInt(60);
-				double angle = random.nextDouble() * Math.PI * 2;
-				double x = target.getX() + Math.cos(angle) * 6;
-				double z = target.getZ() + Math.sin(angle) * 6;
-				world.spawnParticles(ParticleTypes.REVERSE_PORTAL, getX(), getBodyY(0.5), getZ(), 30, 0.4, 0.4, 0.4, 0.05);
-				if (teleport(x, target.getY() + 2.5, z, true)) {
-					world.playSound(null, getX(), getY(), getZ(), SoundEvents.ENTITY_ENDERMAN_TELEPORT, SoundCategory.HOSTILE, 1f, 0.6f);
-				}
-			}
-			if (target instanceof PlayerEntity player && age % 60 == 0 && squaredDistanceTo(player) < 100 && canSee(player)) {
-				player.addStatusEffect(new StatusEffectInstance(StatusEffects.DARKNESS, 40, 0), this);
-			}
+	protected Vec3d hoverPosition(LivingEntity target) {
+		Vec3d away = getPos().subtract(target.getPos()).multiply(1, 0, 1);
+		away = away.lengthSquared() < 0.01 ? new Vec3d(1, 0, 0) : away.normalize();
+		return target.getPos().add(away.multiply(7)).add(0, 3, 0);
+	}
+
+	@Override
+	protected void tickSpecial(ServerWorld world, LivingEntity target) {
+		if (canSee(target)) {
+			specialCooldown = 55;
+			startAction(ACTION_WINDUP, 16);
+			playSound(SoundEvents.BLOCK_BEACON_AMBIENT, 1.2f, 1.8f);
 		}
 	}
 
 	@Override
-	public float getBrightnessAtEyes() {
-		return 1.0f;
+	protected void onWindupDone(ServerWorld world) {
+		LivingEntity target = getTarget();
+		if (target == null) {
+			return;
+		}
+		shootBolt(world, target, MagicBoltEntity.VOID, 5f, 0.6, -6f);
+		shootBolt(world, target, MagicBoltEntity.VOID, 5f, 0.6, 6f);
+		playSound(SoundEvents.ENTITY_ILLUSIONER_CAST_SPELL, 1f, 1.5f);
+		if (random.nextInt(3) == 0) {
+			double a = random.nextDouble() * Math.PI * 2;
+			world.spawnParticles(ParticleTypes.REVERSE_PORTAL, getX(), getBodyY(0.5), getZ(), 30, 0.4, 0.4, 0.4, 0.05);
+			teleport(target.getX() + Math.cos(a) * 6, target.getY() + 3, target.getZ() + Math.sin(a) * 6, true);
+		}
+	}
+
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME;
+	}
+
+	@Override
+	protected SoundEvent getHurtSound(DamageSource source) {
+		return SoundEvents.ENTITY_ENDERMITE_HURT;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundEvents.ENTITY_ENDERMITE_DEATH;
+	}
+
+	@Override
+	public float getSoundPitch() {
+		return 0.5f;
 	}
 }

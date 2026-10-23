@@ -41,17 +41,17 @@ public final class MobSetup {
 
 	/** Uniquement des monstres inédits (plus aucun monstre ni animal vanilla dans la tour). */
 	private static final List<Entry> MONSTERS = List.of(
-		new Entry(ModEntities.CRYSTAL_SPIDER, 1, 10),
-		new Entry(ModEntities.MYCOBOMB, 1, 8),
-		new Entry(ModEntities.SPECTRAL_WOLF, 1, 8),
-		new Entry(ModEntities.BOAR, 2, 7),
-		new Entry(ModEntities.EMBER_SKELETON, 2, 8),
-		new Entry(ModEntities.BRUTE, 4, 4),
+		new Entry(ModEntities.CRAWLER, 1, 10),
+		new Entry(ModEntities.SPORELING, 1, 8),
+		new Entry(ModEntities.GLUTTON, 1, 8),
+		new Entry(ModEntities.BLADE_MANTIS, 2, 8),
+		new Entry(ModEntities.HOWLING_TOTEM, 2, 5),
+		new Entry(ModEntities.EMBER_GARGOYLE, 4, 5),
 		new Entry(ModEntities.VOID_EYE, 5, 5)
 	);
 
 	private static final List<EntityType<?>> BOSSES = List.of(
-		ModEntities.LICH, ModEntities.STONE_SENTINEL, ModEntities.BRUTE
+		ModEntities.RUNE_GOLEM, ModEntities.SHADOW_WEAVER
 	);
 
 	private static EntityType<?> pick(List<Entry> list, int floor, Random random) {

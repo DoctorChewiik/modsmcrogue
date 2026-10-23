@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:cooked_porkchop",
+          "name": "minecraft:slime_ball",
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -34,14 +34,14 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:leather",
+          "name": "minecraft:honey_bottle",
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
                 "min": 0,
-                "max": 2
+                "max": 1
               }
             },
             {
