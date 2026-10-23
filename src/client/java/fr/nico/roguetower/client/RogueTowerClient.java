@@ -15,7 +15,6 @@ import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.InputUtil;
@@ -54,7 +53,7 @@ public class RogueTowerClient implements ClientModInitializer {
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			ClientData.clientTicks++;
-			if (SelfTest.enabled() && client.currentScreen instanceof TitleScreen && ++selfTestTicks == 100) {
+			if (SelfTest.enabled() && client.currentScreen != null && client.getOverlay() == null && ++selfTestTicks == 100) {
 				RogueTower.LOGGER.info("ROGUETOWER CLIENT SELFTEST OK");
 				client.scheduleStop();
 			}
