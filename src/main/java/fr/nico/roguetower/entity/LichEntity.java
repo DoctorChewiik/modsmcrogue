@@ -47,7 +47,7 @@ public class LichEntity extends EvokerEntity {
 				BlockPos pos = getBlockPos().add(random.nextInt(7) - 3, 0, random.nextInt(7) - 3);
 				world.spawnParticles(ParticleTypes.SOUL, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 20, 0.3, 0.5, 0.3, 0.02);
 				EntityType<?> type = random.nextBoolean() ? EntityType.SKELETON : EntityType.ZOMBIE;
-				MobEntity minion = MobSetup.spawn(world, type, pos, Math.max(1, TowerLayout.floorOf(getX())), false, getTarget());
+				MobEntity minion = MobSetup.spawn(world, type, pos, Math.max(1, TowerLayout.floorOf(getX())), false, getTarget() instanceof net.minecraft.entity.player.PlayerEntity p ? p : null);
 				if (minion != null) {
 					minion.addCommandTag(RAISED_TAG);
 				}

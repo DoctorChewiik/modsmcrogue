@@ -45,9 +45,9 @@ public final class SelfTest {
 			check(mobs1 > 0 && mobs5 > 0, "no mobs spawned");
 
 			int x0 = TowerLayout.centerX(2);
-			int i = 0;
+			int n = 0;
 			for (net.minecraft.entity.EntityType<?> type : fr.nico.roguetower.entity.ModEntities.all()) {
-				BlockPos pos = new BlockPos(x0 - 10 + (i++ % 5) * 4, TowerLayout.FLOOR_Y + 1, -10 + (i / 5) * 6);
+				BlockPos pos = new BlockPos(x0 - 10 + (n % 5) * 4, TowerLayout.FLOOR_Y + 1, -10 + (n++ / 5) * 6);
 				check(fr.nico.roguetower.mob.MobSetup.spawn(tower, type, pos, 2, false, null) != null, "spawn " + type);
 			}
 			for (int t = 0; t < 40; t++) {
