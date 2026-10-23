@@ -7,7 +7,7 @@ remplie de monstres et d'animaux agressifs.
 
 1. Installer **Fabric Loader** pour Minecraft **1.21.1** (https://fabricmc.net/use/installer/).
 2. Mettre **Fabric API** (version 1.21.1) dans le dossier `mods`.
-3. Glisser `roguetower-1.0.0.jar` dans le dossier `mods`.
+3. Glisser `roguetower.jar` dans le dossier `mods`.
 
 Le .jar se télécharge dans l'onglet **Releases** du dépôt (compilé automatiquement par GitHub Actions).
 
